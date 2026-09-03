@@ -1,0 +1,33 @@
+skipped ip03-delta-history.json: LakehouseUnavailable: no Delta table at .lab28/delta/feedback
+D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\src\lab28_platform\vector_store.py:83: UserWarning: The model sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 now uses mean pooling instead of CLS embedding. In order to preserve the previous behaviour, consider either pinning fastembed version to 0.5.1 or using `add_custom_model` functionality.
+  self._dense = TextEmbedding(model_name=self._settings.embedding_model, **kwargs)
+wrote evidence\ip05-qdrant-search.json
+Downloading artifacts:   0%|          | 0/1 [00:00<?, ?it/s]Downloading artifacts: 100%|██████████| 1/1 [00:00<00:00, 13.55it/s]Downloading artifacts: 100%|██████████| 1/1 [00:00<00:00, 13.37it/s]
+wrote evidence\ip06-mlflow-release.json
+D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py:290: UserWarning: Failed to obtain server version. Unable to check client-server compatibility. Set check_compatibility=False to skip version check.
+  show_warning(
+wrote evidence\ip07-vllm-identity.json
+Downloading artifacts:   0%|          | 0/1 [00:00<?, ?it/s]Downloading artifacts: 100%|██████████| 1/1 [00:00<00:00, 12.08it/s]Downloading artifacts: 100%|██████████| 1/1 [00:00<00:00, 12.08it/s]
+D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\qdrant_client\qdrant_remote.py:290: UserWarning: Failed to obtain server version. Unable to check client-server compatibility. Set check_compatibility=False to skip version check.
+  show_warning(
+wrote evidence\integration-report.json
+6 evidence file(s) must come from outside this process
+{
+  "written": {
+    "ip05-qdrant-search.json": "evidence\\ip05-qdrant-search.json",
+    "ip06-mlflow-release.json": "evidence\\ip06-mlflow-release.json",
+    "ip07-vllm-identity.json": "evidence\\ip07-vllm-identity.json",
+    "integration-report.json": "evidence\\integration-report.json"
+  },
+  "failed": {
+    "ip03-delta-history.json": "LakehouseUnavailable: no Delta table at .lab28/delta/feedback"
+  },
+  "outstanding": {
+    "ip01-kafka-consume.json": "integration test: consume from data.raw and keep the headers",
+    "ip02-airflow-run.json": "Airflow: DAG run id, task states, asset event",
+    "ip04-feast-online.json": "Feast: online row after materialization",
+    "ip08-gateway.json": "gateway: a 200 and a 429 with x-request-id",
+    "ip09-prometheus-targets.json": "Prometheus: targets and alert rules",
+    "ip10-trace.json": "trace backend: one trace carrying the required span names"
+  }
+}

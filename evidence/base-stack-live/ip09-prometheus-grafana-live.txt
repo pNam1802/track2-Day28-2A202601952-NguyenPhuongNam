@@ -1,0 +1,23 @@
+# IP09 — Components -> Prometheus/Grafana (base stack, live capture)
+# captured 2026-09-03T13:14:49Z
+# Ghi chú: chụp trực tiếp từ Prometheus/Grafana đang chạy. Các target thuộc
+# profile full (airflow, spark) sẽ ở trạng thái down vì chưa bật profile đó.
+
+## /api/v1/targets — job / instance / health
+lab28-airflow-batch    http://pushgateway:9091/metrics               up       
+lab28-api              http://api:8000/metrics                       up       
+lab28-collector        http://otel-collector:8888/metrics            up       
+lab28-feast            http://feast:8000/metrics                     up       
+lab28-gateway          http://gateway:9901/stats/prometheus          up       
+lab28-kafka            http://kafka-exporter:9308/metrics            up       
+lab28-mlflow           http://api:8000/metrics                       up       
+lab28-prometheus       http://prometheus:9090/metrics                up       
+lab28-qdrant           http://qdrant:6333/metrics                    up       
+lab28-vllm-optional    http://host.docker.internal:8001/metrics      down     Get "http://host.docker.internal:8001/metrics": dial tcp 192.168.65.254:8001: connect: connection refused
+
+## /api/v1/rules — alert rules đã nạp
+group=lab28-slo  rule=Lab28ApiUnavailable              type=alerting  health=ok
+group=lab28-slo  rule=Lab28HighErrorRatio              type=alerting  health=ok
+
+## Grafana dashboards đã provision
+Lab 28 Platform Overview  (uid=lab28-platform)

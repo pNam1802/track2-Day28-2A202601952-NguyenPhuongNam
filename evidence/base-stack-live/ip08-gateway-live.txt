@@ -1,0 +1,68 @@
+# IP08 — Client -> Envoy gateway (base stack, live capture)
+# captured 2026-09-03T13:14:08Z
+# Ghi chú: file này chụp trực tiếp từ gateway đang chạy, KHÔNG phải
+# ip08-gateway.json do integration-tests sinh (suite đó cần profile full).
+
+## 20 request liên tiếp vào /health qua gateway :8080
+req  1  status=200  x-request-id=628fe752-2955-99a7-a055-ba8282e1ec74
+req  2  status=200  x-request-id=34ee5949-5267-9d94-9311-511b4ae9b8cb
+req  3  status=200  x-request-id=a59fcb1b-38f9-9623-b802-eb2d3875fca2
+req  4  status=200  x-request-id=58a2e5aa-4afb-98af-8a7f-132fdd95e75d
+req  5  status=200  x-request-id=86426f70-aaa8-9253-9cfe-473f9b729145
+req  6  status=200  x-request-id=52ddb7d3-9e18-93c0-aba7-c567288717bc
+req  7  status=200  x-request-id=fc1dfe12-f73f-9dba-8fda-70781543f24b
+req  8  status=200  x-request-id=2e2cfc63-6fb1-9511-925b-dc8e91ef7316
+req  9  status=200  x-request-id=9f7d0bf7-a305-964d-9987-eb8c0026fd42
+req 10  status=200  x-request-id=68ae8baa-3ae3-95f0-b376-cab06cdc3b14
+req 11  status=200  x-request-id=74b9ec84-6006-98d5-8f3d-353cd41ceb4e
+req 12  status=200  x-request-id=33a881e1-feae-9e22-95f2-a317d0f2c6a3
+req 13  status=200  x-request-id=e2c2a93f-c8c8-9bf9-a677-5cba3abf3213
+req 14  status=200  x-request-id=ebc7f3f0-342e-9bbf-abac-40e68877f8a4
+req 15  status=200  x-request-id=8d675e29-b653-9513-84e3-71a84806a40c
+req 16  status=200  x-request-id=de18c5ca-34c4-9c30-bc07-fcf272237b5c
+req 17  status=200  x-request-id=4325471c-c85c-908f-9c83-328857a5b8cc
+req 18  status=200  x-request-id=0a20710b-53b8-90e8-a6d2-1c48fc9da3b8
+req 19  status=200  x-request-id=44b8eb93-a619-9305-a82c-379a4fd24156
+req 20  status=200  x-request-id=5e139e32-de3e-9b15-abd0-a238c9881964
+
+## Burst 40 request song song vào /health (limit: max_tokens=10, tokens_per_fill=10, fill_interval=1s)
+status=200  x-request-id=751b2101-b1cf-98c0-9094-7494a299eb7e
+status=200  x-request-id=6643b4bd-1983-930e-8e6c-dc1234bd8a91
+status=200  x-request-id=6fabc576-afc6-976d-90c1-772f7b23b811
+status=200  x-request-id=8a11aeb6-2459-9c03-bb89-74facfcda14f
+status=200  x-request-id=863c86c0-963f-9210-ae89-4dc56c7fd8c9
+status=200  x-request-id=94d6eb48-2213-9fd5-92a3-cb4c3a383626
+status=200  x-request-id=243838c0-fe3e-9649-8f41-ce21333a81ca
+status=200  x-request-id=1c0d82fa-f5d6-96e3-a542-4cf87000d895
+status=200  x-request-id=4730c560-b2a3-9b4c-8c7f-1e295fedcf27
+status=200  x-request-id=77caa827-d8e5-947f-955f-bf5b8bb3bb84
+status=200  x-request-id=b3d0d5c8-755d-999d-b6cf-0435aefdc390
+status=200  x-request-id=32715307-86bd-9dac-9ca6-d68ae62db1b9
+status=200  x-request-id=050a5533-02e9-9b2a-ab0a-e9969c9d8fa5
+status=200  x-request-id=67e9718a-a27c-9323-b076-b48005582d90
+status=200  x-request-id=8a0a293a-2871-9b51-a906-5dd5b866f37e
+status=200  x-request-id=712f0ba9-cb68-9f0c-8097-6af05144db06
+status=200  x-request-id=edc1d59d-3957-9665-8518-e9eb54558723
+status=200  x-request-id=c133c8b9-5a5a-9c76-a184-172ca782443d
+status=429  x-request-id=69854971-c308-9b2d-9017-d0ad8b053488
+status=429  x-request-id=027b7f3e-46c4-97a5-a514-c2edfe631e86
+status=200  x-request-id=588a9fc3-4b28-9d56-a4aa-7ba614561ed3
+status=200  x-request-id=1ed52278-a828-952b-9cc3-ff8234e19e57
+status=429  x-request-id=52548ee0-658f-9a8a-9065-0fccae94c46a
+status=200  x-request-id=26ea40eb-f6c9-9645-b553-16709ef4192d
+status=200  x-request-id=cea2cc24-ddce-98e4-a814-446fa4bb251c
+status=429  x-request-id=84a4d961-aecf-9e8f-83f6-81f71539ca8b
+status=429  x-request-id=a4c58b52-fe3b-956a-b7d6-77b4ef7351dc
+status=200  x-request-id=b28b8287-d305-90be-942a-49d958e4a99f
+status=429  x-request-id=c9f41f9e-3acc-9e8a-9918-92bd38e0dbd5
+status=200  x-request-id=ea20c375-3027-914e-b231-de560a3f84f6
+status=429  x-request-id=189c9a0a-8f83-9a24-b03a-dd561fcfca0a
+status=200  x-request-id=efe4949a-646a-9d11-a0d2-dd5a68393d7a
+status=200  x-request-id=9ffbd453-f15d-9a99-b790-820ba5c4d329
+status=200  x-request-id=b02a3c84-586b-90d3-b3bc-d1b0e1d98894
+status=200  x-request-id=1b966ce1-486d-96ab-be1a-b2498fa9df32
+status=200  x-request-id=b23b3ab0-a7ac-9b6e-8ce9-2846a454beda
+status=429  x-request-id=d9193930-3a51-9763-809d-a2379b95d5e8
+status=200  x-request-id=fc6d16aa-05a4-997b-8349-6ad4e9953300
+status=429  x-request-id=351af678-6c35-9897-8ebd-329b9cc26d5b
+status=429  x-request-id=72d37c93-2bb2-9bdf-82a4-6b186f2f39f8

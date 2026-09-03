@@ -1,0 +1,23 @@
+# IP10 — Components -> OTLP trace (base stack, live capture)
+# captured 2026-09-03T15:50:04Z
+# Ghi chú: trace này chứng minh chặng gateway -> API -> Kafka produce.
+# Các chặng Airflow / Spark / Feast / vLLM cần profile full + endpoint vLLM,
+# nên IP10 mới đạt MỘT PHẦN. Không tự chế span để lấp chỗ trống.
+
+## Trace queried từ Jaeger :16686
+traceID: 569e755ca77915ab2531ecd7a18b548e
+spans  : 8
+
+  lab28-gateway    | lab28.gateway.request
+  lab28-api        | POST /api/v1/documents
+  lab28-api        | POST /api/v1/documents http receive
+  lab28-api        | lab28.api.ingest
+  lab28-api        | lab28.kafka.produce
+  lab28-api        | POST /api/v1/documents http send
+  lab28-api        | POST /api/v1/documents http send
+  lab28-api        | POST /api/v1/documents http send
+
+## Collector export counters (Prometheus)
+ otelcol_exporter_sent_spans{exporter=debug} = 499
+ otelcol_exporter_sent_spans{exporter=otlp/jaeger} = 499
+ otelcol_exporter_send_failed_spans = (khong co series -> chua co span nao that bai)

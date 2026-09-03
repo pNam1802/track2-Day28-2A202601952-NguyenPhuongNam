@@ -1,0 +1,19 @@
+# Fast checks — captured 2026-09-03T12:50:29Z
+# commit: 5fc2c1a5c2103cf880fd023287c138a644395295  branch: ca-nhan-nam
+
+$ uv run ruff check .
+All checks passed!
+
+$ uv run python scripts/verify_matrix.py
+OK    245 checks passed: contracts\integration-matrix.yaml matches the repository
+
+$ uv run python scripts/check_portability.py
+OK    supported workflow is host-path and shell independent
+
+$ uv run python scripts/validate_manifests.py
+Kubernetes and GitOps manifest contracts passed
+
+$ uv run pytest starter-tests tests -q
+........................................................................ [ 82%]
+...............                                                          [100%]
+87 passed in 7.24s

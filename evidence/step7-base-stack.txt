@@ -1,0 +1,585 @@
+# Bước 7 — base stack — 2026-09-03T13:07:40Z
+# commit: 5fc2c1a5c2103cf880fd023287c138a644395295
+
+$ docker compose ps
+SERVICE          STATUS
+api              Up About a minute (healthy)
+feast            Up 4 minutes (healthy)
+gateway          Up About a minute
+grafana          Up About a minute
+jaeger           Up 5 minutes
+kafka            Up 2 minutes (healthy)
+kafka-exporter   Up About a minute
+mlflow           Up 5 minutes (healthy)
+otel-collector   Up 13 seconds
+prometheus       Up About a minute
+pushgateway      Up 5 minutes
+qdrant           Up 5 minutes (healthy)
+
+$ uv run lab28 topics
+1 broker(s) at localhost:9092
+{
+  "topics": {
+    "data.raw": "created",
+    "data.processed": "created",
+    "model.events": "created",
+    "data.raw.dlq": "created"
+  },
+  "broker_topics": [
+    "data.processed",
+    "data.raw",
+    "data.raw.dlq",
+    "model.events"
+  ]
+}
+
+$ uv run lab28 index --source file
+embedding 13 document(s) from file
+D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\src\lab28_platform\vector_store.py:83: UserWarning: The model sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 now uses mean pooling instead of CLS embedding. In order to preserve the previous behaviour, consider either pinning fastembed version to 0.5.1 or using `add_custom_model` functionality.
+  self._dense = TextEmbedding(model_name=self._settings.embedding_model, **kwargs)
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\huggingface_hub\file_download.py:141: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\nguye\AppData\Local\Temp\fastembed_cache\models--qdrant--paraphrase-multilingual-MiniLM-L12-v2-onnx-Q. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+Fetching 5 files:   0%|          | 0/5 [00:29<?, ?it/s]
+2026-09-03 20:08:25.963 | ERROR    | fastembed.common.model_management:download_model:446 - Could not download model from HuggingFace: [WinError 1314] A required privilege is not held by the client: '..\\..\\blobs\\b1879d702821e753ffe4245048eee415d54a9385' -> 'C:\\Users\\nguye\\AppData\\Local\\Temp\\fastembed_cache\\models--qdrant--paraphrase-multilingual-MiniLM-L12-v2-onnx-Q\\snapshots\\faf4aa4225822f3bc6376869cb1164e8e3feedd0\\special_tokens_map.json' Falling back to other sources.
+2026-09-03 20:08:25.963 | ERROR    | fastembed.common.model_management:download_model:469 - Could not download model from either source, sleeping for 3.0 seconds, 2 retries left.
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00,  7.21it/s]Fetching 5 files: 100%|██████████| 5/5 [00:00<00:00,  7.18it/s]
+Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\huggingface_hub\file_download.py:141: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\nguye\AppData\Local\Temp\fastembed_cache\models--Qdrant--bm25. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+Fetching 18 files:   0%|          | 0/18 [00:01<?, ?it/s]
+2026-09-03 20:08:36.249 | ERROR    | fastembed.common.model_management:download_model:446 - Could not download model from HuggingFace: [WinError 1314] A required privilege is not held by the client: '..\\..\\blobs\\9e26dfeeb6e641a33dae4961196235bdb965b21b' -> 'C:\\Users\\nguye\\AppData\\Local\\Temp\\fastembed_cache\\models--Qdrant--bm25\\snapshots\\22b8d2af71a76161e18dd432d2cee0eefa66e412\\config.json' Falling back to other sources.
+2026-09-03 20:08:36.249 | ERROR    | fastembed.common.model_management:download_model:469 - Could not download model from either source, sleeping for 3.0 seconds, 2 retries left.
+Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]Fetching 18 files:  50%|█████     | 9/18 [00:00<00:00, 24.72it/s]Fetching 18 files:  67%|██████▋   | 12/18 [00:00<00:00, 12.47it/s]Fetching 18 files:  94%|█████████▍| 17/18 [00:01<00:00, 13.79it/s]Fetching 18 files: 100%|██████████| 18/18 [00:01<00:00, 10.88it/s]
+{
+  "source": "file",
+  "collection": "lab28_documents",
+  "documents_submitted": 13,
+  "points_upserted": 13,
+  "points_total": 13,
+  "embedding_model_id": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2@faf4aa4225822f3bc6376869cb1164e8e3feedd0"
+}
+
+$ uv run lab28 release
+2026/09/03 20:09:04 INFO mlflow.tracking.fluent: Experiment with name 'lab28-platform' does not exist. Creating a new experiment.
+2026/09/03 20:09:07 INFO mlflow.utils.uv_utils: Detected uv project: found uv.lock and pyproject.toml in D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam
+┌───────────────────── Traceback (most recent call last) ─────────────────────┐
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\src\lab28_platform\model_re │
+│ gistry.py:139 in register                                                   │
+│                                                                             │
+│   136 │   │   │   │   │   {"template": spec.prompt_template, "version":     │
+│       spec.prompt_version},                                                 │
+│   137 │   │   │   │   │   "prompt.json",                                    │
+│   138 │   │   │   │   )                                                     │
+│ > 139 │   │   │   │   info = mlflow.pyfunc.log_model(                       │
+│   140 │   │   │   │   │   name="release",                                   │
+│   141 │   │   │   │   │   python_model=_PromptRelease(),                    │
+│   142 │   │   │   │   │   artifacts=None,                                   │
+│                                                                             │
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\mlf │
+│ low\tracing\provider.py:1037 in wrapper                                     │
+│                                                                             │
+│   1034 │   │   │   return f(*args, **kwargs)                                │
+│   1035 │   │                                                                │
+│   1036 │   │   try:                                                         │
+│ > 1037 │   │   │   return f(*args, **kwargs)                                │
+│   1038 │   │   finally:                                                     │
+│   1039 │   │   │   if entered:                                              │
+│   1040 │   │   │   │   with _trace_disabled_lock:                           │
+│                                                                             │
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\mlf │
+│ low\pyfunc\__init__.py:3701 in log_model                                    │
+│                                                                             │
+│   3698 │   │   metadata of the logged model.                                │
+│   3699 │   """                                                              │
+│   3700 │   flavor_name = _get_pyfunc_model_flavor_name(python_model)        │
+│ > 3701 │   return Model.log(                                                │
+│   3702 │   │   artifact_path=artifact_path,                                 │
+│   3703 │   │   name=name,                                                   │
+│   3704 │   │   flavor=mlflow.pyfunc,                                        │
+│                                                                             │
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\mlf │
+│ low\models\model.py:1197 in log                                             │
+│                                                                             │
+│   1194 │   │   │                                                            │
+│   1195 │   │   │   with _use_logged_model(model=model):                     │
+│   1196 │   │   │   │   if run_id is not None:                               │
+│ > 1197 │   │   │   │   │   client.log_outputs(                              │
+│   1198 │   │   │   │   │   │   run_id=run_id,                               │
+│        models=[LoggedModelOutput(model.model_id, step=step)]                │
+│   1199 │   │   │   │   │   )                                                │
+│   1200 │   │   │   │   │   log_model_metrics_for_step(                      │
+│                                                                             │
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\mlf │
+│ low\tracking\client.py:2771 in log_outputs                                  │
+│                                                                             │
+│   2768 │   │   self._tracking_client.log_inputs(run_id, datasets, models)   │
+│   2769 │                                                                    │
+│   2770 │   def log_outputs(self, run_id: str, models:                       │
+│        list[LoggedModelOutput]):                                            │
+│ > 2771 │   │   self._tracking_client.log_outputs(run_id, models)            │
+│   2772 │                                                                    │
+│   2773 │   def log_artifact(self, run_id, local_path, artifact_path=None)   │
+│        -> None:                                                             │
+│   2774 │   │   """Write a local file or directory to the remote             │
+│        ``artifact_uri``.                                                    │
+│                                                                             │
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\mlf │
+│ low\tracking\_tracking_service\client.py:618 in log_outputs                 │
+│                                                                             │
+│    615 │   │   self.store.log_inputs(run_id=run_id, datasets=datasets,      │
+│        models=models)                                                       │
+│    616 │                                                                    │
+│    617 │   def log_outputs(self, run_id: str, models:                       │
+│        list[LoggedModelOutput]):                                            │
+│ >  618 │   │   self.store.log_outputs(run_id=run_id, models=models)         │
+│    619 │                                                                    │
+│    620 │   def _record_logged_model(self, run_id, mlflow_model):            │
+│    621 │   │   from mlflow.models import Model                              │
+│                                                                             │
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\mlf │
+│ low\store\tracking\rest_store.py:1723 in log_outputs                        │
+│                                                                             │
+│   1720 │   │   │   None.                                                    │
+│   1721 │   │   """                                                          │
+│   1722 │   │   req_body = message_to_json(LogOutputs(run_id=run_id,         │
+│        models=[m.to_proto() for m in models]))                              │
+│ > 1723 │   │   self._call_endpoint(LogOutputs, req_body)                    │
+│   1724 │                                                                    │
+│   1725 │                                                                    │
+│        #################################################################### │
+│        ########################                                             │
+│   1726 │   # Scorer Management APIs                                         │
+│                                                                             │
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\mlf │
+│ low\store\tracking\rest_store.py:269 in _call_endpoint                      │
+│                                                                             │
+│    266 │   │   else:                                                        │
+│    267 │   │   │   endpoint, method = method_to_info[api]                   │
+│    268 │   │   response_proto = response_proto or api.Response()            │
+│ >  269 │   │   return call_endpoint(                                        │
+│    270 │   │   │   self.get_host_creds(),                                   │
+│    271 │   │   │   endpoint,                                                │
+│    272 │   │   │   method,                                                  │
+│                                                                             │
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\mlf │
+│ low\utils\rest_utils.py:672 in call_endpoint                                │
+│                                                                             │
+│   669 │   │   call_kwargs["json"] = json_body                               │
+│   670 │   │   response = http_request(**call_kwargs)                        │
+│   671 │                                                                     │
+│ > 672 │   response = verify_rest_response(                                  │
+│   673 │   │   response,                                                     │
+│   674 │   │   endpoint,                                                     │
+│   675 │   │   expected_status=expected_status,                              │
+│                                                                             │
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\.venv\Lib\site-packages\mlf │
+│ low\utils\rest_utils.py:379 in verify_rest_response                         │
+│                                                                             │
+│   376 │   # Handle non-expected status codes                                │
+│   377 │   if response.status_code != expected_status:                       │
+│   378 │   │   if _can_parse_as_json_object(response.text):                  │
+│ > 379 │   │   │   raise RestException(json.loads(response.text))            │
+│   380 │   │   else:                                                         │
+│   381 │   │   │   base_msg = (                                              │
+│   382 │   │   │   │   f"API request to endpoint {endpoint} "                │
+└─────────────────────────────────────────────────────────────────────────────┘
+RestException: BAD_REQUEST: (sqlite3.IntegrityError) UNIQUE constraint failed: 
+inputs.source_type, inputs.source_id, inputs.destination_type, 
+inputs.destination_id
+[SQL: INSERT INTO inputs (input_uuid, source_type, source_id, destination_type,
+destination_id, step) VALUES (?, ?, ?, ?, ?, ?)]
+[parameters: ('dc692a61ffe34f96ae7b64506339fe90', 'RUN_OUTPUT', 
+'cafbc71c6850473faa2e4e50f19f585b', 'MODEL_OUTPUT', 
+'m-0924b2750ddc43918c65956a26f6a622', 0)]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+The above exception was the direct cause of the following exception:
+
+┌───────────────────── Traceback (most recent call last) ─────────────────────┐
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\src\lab28_platform\cli.py:3 │
+│ 58 in release                                                               │
+│                                                                             │
+│   355 │   │   delta_version=_delta_version(settings.feedback_table),        │
+│   356 │   )                                                                 │
+│   357 │   registry = ReleaseRegistry(settings.mlflow)                       │
+│ > 358 │   entry = registry.register(spec, promote=promote)                  │
+│   359 │   _note(f"registered {entry.name} v{entry.version}" + (" as         │
+│       champion" if promote else ""))                                        │
+│   360 │   _emit(entry.to_dict())                                            │
+│   361                                                                       │
+│                                                                             │
+│ D:\Vin\track2-Day28-2A202601952-NguyenPhuongNam\src\lab28_platform\model_re │
+│ gistry.py:150 in register                                                   │
+│                                                                             │
+│   147 │   │   │   │   )                                                     │
+│   148 │   │   │   │   run_id = run.info.run_id                              │
+│   149 │   │   except MlflowException as error:                              │
+│ > 150 │   │   │   raise RegistryUnavailable(f"could not register release:   │
+│       {error}") from error                                                  │
+│   151 │   │                                                                 │
+│   152 │   │   version = self._version_for(info.model_uri, run_id)           │
+│   153 │   │   for key, value in spec.as_tags().items():                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+RegistryUnavailable: could not register release: BAD_REQUEST: 
+(sqlite3.IntegrityError) UNIQUE constraint failed: inputs.source_type, 
+inputs.source_id, inputs.destination_type, inputs.destination_id
+[SQL: INSERT INTO inputs (input_uuid, source_type, source_id, destination_type,
+destination_id, step) VALUES (?, ?, ?, ?, ?, ?)]
+[parameters: ('dc692a61ffe34f96ae7b64506339fe90', 'RUN_OUTPUT', 
+'cafbc71c6850473faa2e4e50f19f585b', 'MODEL_OUTPUT', 
+'m-0924b2750ddc43918c65956a26f6a622', 0)]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+🏃 View run release-v1 at: http://localhost:5000/#/experiments/1/runs/cafbc71c6850473faa2e4e50f19f585b
+🧪 View experiment at: http://localhost:5000/#/experiments/1
+
+$ uv run lab28 seed --via-gateway
+documents: 13 accepted, 0 rejected
+feedback: 10 accepted, 2 rejected
+{
+  "target": "http://localhost:8080",
+  "accepted": {
+    "documents": [
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "a95a09bbd8d24a20805be8180e8a0da1",
+        "idempotency_key": "doc:doc-ip01-kafka:d7089177544aeae3578788aa1612914e",
+        "entity_id": "doc-ip01-kafka",
+        "topic": "data.raw",
+        "trace_id": "69a6f7090516e7ab90f946c651de0fa0"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "9429c37161124814995389a140565ee2",
+        "idempotency_key": "doc:doc-ip02-airflow:9b7e8bc4f2409294439202f5d734c323",
+        "entity_id": "doc-ip02-airflow",
+        "topic": "data.raw",
+        "trace_id": "e61ff92b9d246fa57ba4fc99415dc738"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "a1a6f531897c44d288db3c1f96867e63",
+        "idempotency_key": "doc:doc-ip03-delta:016a8ab972a0b39b02f80b29e043f020",
+        "entity_id": "doc-ip03-delta",
+        "topic": "data.raw",
+        "trace_id": "b07103d9dda1b8395b5ebd8a0c015024"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "4157d2ab3eb449b2988a780ef2fc9760",
+        "idempotency_key": "doc:doc-ip04-feast:e910ca4ed86df2ccefd6f5c57a7b7c24",
+        "entity_id": "doc-ip04-feast",
+        "topic": "data.raw",
+        "trace_id": "c565d75f78dddd7e8686be0ecead5d4c"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "32b97bf77c9f46449d865d9a39617b8d",
+        "idempotency_key": "doc:doc-ip05-qdrant:04b9607993855f1c41e3f2eae24f18ca",
+        "entity_id": "doc-ip05-qdrant",
+        "topic": "data.raw",
+        "trace_id": "3bc798eb63788ea3220508a25fb6173d"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "3c491121e9ed401995950d25645874dc",
+        "idempotency_key": "doc:doc-ip06-mlflow:d29d6d89db0db9c04ccb5152078c2c83",
+        "entity_id": "doc-ip06-mlflow",
+        "topic": "data.raw",
+        "trace_id": "04421e51f247b0336214a227da23b4c6"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "47bb4a931f8e4ab1be5882ec31ffd1df",
+        "idempotency_key": "doc:doc-ip07-vllm:31f59173d9613f4e261856ede44c8e05",
+        "entity_id": "doc-ip07-vllm",
+        "topic": "data.raw",
+        "trace_id": "67c08423ae54068b699f50e3662f2be8"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "0366e7cc17f34c3ab8be95eec329ef09",
+        "idempotency_key": "doc:doc-ip08-gateway:e4dfa038a8a56b7b26089da6529bfa8a",
+        "entity_id": "doc-ip08-gateway",
+        "topic": "data.raw",
+        "trace_id": "7881bcd72a0fdd7a3fa4faf571a23e79"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "0c6add60c70a4ef48e7cd9e54a51117b",
+        "idempotency_key": "doc:doc-ip09-metrics:c77911d86b4efa0d36f5a3012d814580",
+        "entity_id": "doc-ip09-metrics",
+        "topic": "data.raw",
+        "trace_id": "e83179d3ff519537728b97ed5650e57c"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "07604a0b29224c62ace7c70296242f92",
+        "idempotency_key": "doc:doc-ip10-tracing:95f761abc8382635d40c5a1402c15e38",
+        "entity_id": "doc-ip10-tracing",
+        "topic": "data.raw",
+        "trace_id": "47bd74c51cbaaa14f3cfce39e64c32f0"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "e7250b207106418f9ce2d8450a62c9ee",
+        "idempotency_key": "doc:doc-health-semantics:39bf239d7881f0b165d4141abadc305f",
+        "entity_id": "doc-health-semantics",
+        "topic": "data.raw",
+        "trace_id": "065856f4dfe4790fa7f9a1d611759600"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "6c61bc1202fc4cc2b43abf3df68d77b3",
+        "idempotency_key": "doc:doc-latency-budget:97027cdd73da5c04346a93a37deb79b7",
+        "entity_id": "doc-latency-budget",
+        "topic": "data.raw",
+        "trace_id": "0fbb99a18ee8cb0702e793d23311e39c"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "a273b3a5a84b4aa4ac866fe400db98bd",
+        "idempotency_key": "doc:doc-degraded-policy:68db776fa8b109d09fe8554e0f85cc7e",
+        "entity_id": "doc-degraded-policy",
+        "topic": "data.raw",
+        "trace_id": "f488d62a0197aba1c5e7031cf6fd60ee"
+      }
+    ],
+    "feedback": [
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "f7d19b024e2d43d0add1be44a44dd9df",
+        "idempotency_key": "fb:asker-001:f3facde79d83f95f289b379395909a13",
+        "entity_id": "asker-001",
+        "topic": "data.raw",
+        "trace_id": "476a1c5772ff3136dfb6dce9c3c4679b"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "cafeeeaa33624f1cbd85faea7d280373",
+        "idempotency_key": "fb:asker-001:591e45fef80bdf65e304ea89f7ebbfdb",
+        "entity_id": "asker-001",
+        "topic": "data.raw",
+        "trace_id": "7b2562e13d36f3fa7dd5abe2cecf55a8"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "392dedc41f004337b20a6c41a262dfca",
+        "idempotency_key": "fb:asker-002:b41008bcdf50bd6b364faf7fd10d14a4",
+        "entity_id": "asker-002",
+        "topic": "data.raw",
+        "trace_id": "b247155b6678efce674d731da624e014"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "b6d378c115d347c2b1fbc0c09b2be13f",
+        "idempotency_key": "fb:asker-002:375f76713df85ca78213b292aa7b0aea",
+        "entity_id": "asker-002",
+        "topic": "data.raw",
+        "trace_id": "5056e861ac60615e3a337074cf18fce2"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "daea0c052bc64524a3f4d2c087773365",
+        "idempotency_key": "fb:asker-003:b865bc7aed7a8e02b9bf46bbe2db2ddb",
+        "entity_id": "asker-003",
+        "topic": "data.raw",
+        "trace_id": "c599a230740e6a712babd0a2f773c413"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "3819270d1dd0463b9952ed5ecb826634",
+        "idempotency_key": "fb:asker-003:5561621d910d0b17826d04064e2299be",
+        "entity_id": "asker-003",
+        "topic": "data.raw",
+        "trace_id": "a1e2dc63a3e94840cb208bdb32da60e4"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "86f2daa27cf149d999a7a4a159f6e70d",
+        "idempotency_key": "fb:asker-004:e9ffe6b8117c980b1402e4d741ff60b5",
+        "entity_id": "asker-004",
+        "topic": "data.raw",
+        "trace_id": "42f22282f9e915b35a5a5db17316c415"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "824867d4268245a3a9af4b02fd5b35af",
+        "idempotency_key": "fb:asker-004:5eda48b9b1e2545ee36c4e6b7777c64f",
+        "entity_id": "asker-004",
+        "topic": "data.raw",
+        "trace_id": "f5c3e149ee47a5e00dd4e108bc052133"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "f657a5ab4c0e41d39e1ace6c8fec10ae",
+        "idempotency_key": "fb:asker-005:ba540e79cfee37fd1e33b083306cdcdf",
+        "entity_id": "asker-005",
+        "topic": "data.raw",
+        "trace_id": "5e45eebeac6d940aaab43232dffddedf"
+      },
+      {
+        "schema_version": "1",
+        "status": "accepted",
+        "event_id": "28509c257ca14a2dad6b68978d377e07",
+        "idempotency_key": "fb:asker-006:abf3c6ff99f52cba1b4e923fa4a9dfe3",
+        "entity_id": "asker-006",
+        "topic": "data.raw",
+        "trace_id": "0b27a579eed511a7e46b741ae6c2cf89"
+      }
+    ]
+  },
+  "rejected": {
+    "documents": [],
+    "feedback": [
+      {
+        "status_code": 429,
+        "body": "local_rate_limited"
+      },
+      {
+        "status_code": 429,
+        "body": "local_rate_limited"
+      }
+    ]
+  }
+}
+
+### NOTE: lệnh 'release' ở trên fail 1 lần do MLflow sqlite race
+### (UNIQUE constraint failed: inputs.*). Chạy lại thành công, log dưới đây.
+
+$ uv run lab28 release   (lần 2 — thành công)
+{
+  "name": "lab28-rag-release",
+  "version": "1",
+  "run_id": "73c442ab439d44b19892c187d33ab419",
+  "alias": "champion",
+  "prompt_version": "v1",
+  "vllm_model_id": "Qwen/Qwen3-1.7B",
+  "embedding_model_id": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2@faf4aa4225822f3bc6376869cb1164e8e3feedd0",
+  "delta_version": null,
+  "top_k": 3
+}
+
+$ uv run lab28 inspect
+probed kafka
+probed spark-delta
+probed feast
+probed qdrant
+probed mlflow
+probed vllm
+{
+  "kafka": {
+    "brokers": 1,
+    "topics": [
+      "data.processed",
+      "data.raw",
+      "data.raw.dlq",
+      "model.events"
+    ]
+  },
+  "spark-delta": {
+    "reachable": false,
+    "tables": {
+      "feedback": {
+        "uri": ".lab28/delta/feedback",
+        "error": "no Delta table at .lab28/delta/feedback"
+      },
+      "documents": {
+        "uri": ".lab28/delta/documents",
+        "error": "no Delta table at .lab28/delta/documents"
+      }
+    }
+  },
+  "feast": {
+    "reachable": true,
+    "status_code": 200,
+    "healthy": true,
+    "detail": "ok"
+  },
+  "qdrant": {
+    "reachable": true,
+    "collection_exists": true,
+    "points": 13,
+    "detail": "ok"
+  },
+  "mlflow": {
+    "reachable": true,
+    "has_champion": true,
+    "version": "1",
+    "run_id": "73c442ab439d44b19892c187d33ab419",
+    "detail": "lab28-rag-release v1 is champion"
+  },
+  "vllm": {
+    "reachable": false,
+    "version": null,
+    "served_models": [],
+    "vllm_metric_names": [],
+    "vllm_metric_count": 0,
+    "is_real_vllm": false,
+    "detail": "unreachable: ConnectError"
+  }
+}
+
+$ uv run lab28 ready
+status: not_ready
+{
+  "schema_version": "1",
+  "status": "not_ready",
+  "components": [
+    {
+      "name": "kafka",
+      "ready": true,
+      "detail": "1 broker(s); 4 declared topics present",
+      "owner": "team-ingestion"
+    },
+    {
+      "name": "mlflow",
+      "ready": true,
+      "detail": "lab28-rag-release v1 is champion",
+      "owner": "team-data"
+    },
+    {
+      "name": "qdrant",
+      "ready": true,
+      "detail": "13 points; ok",
+      "owner": "team-serving"
+    },
+    {
+      "name": "vllm",
+      "ready": false,
+      "detail": "not a verifiable vLLM server: unreachable: ConnectError",
+      "owner": "team-serving"
+    },
+    {
+      "name": "feast",
+      "ready": true,
+      "detail": "ok",
+      "owner": "team-data"
+    }
+  ],
+  "trace_id": "00000000000000000000000000000000"
+}
+exit=0

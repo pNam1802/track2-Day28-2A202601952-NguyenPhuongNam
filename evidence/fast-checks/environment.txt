@@ -1,0 +1,60 @@
+# Environment record — Day 28 Track 2
+# captured 2026-09-03T16:05:56Z
+# commit: 5fc2c1a5c2103cf880fd023287c138a644395295
+
+## Máy chạy lab
+  CPU            : 8 vCPU
+  RAM vật lý     : 7.8 GiB
+  Docker Desktop : 3.74 GiB (mặc định WSL2 = 50% RAM vật lý)
+  Ổ đĩa          : repo trên D:, Docker VHDX trên C:
+
+$ uv run lab28 preflight
+profile: local-standard — continue locally
+{
+  "profile": "local-standard",
+  "local_ready": true,
+  "python": "3.11.15",
+  "docker_cli": true,
+  "docker_daemon": true,
+  "cpu_count": 8,
+  "memory_gib": null,
+  "disk_free_gib": 47.2,
+  "next": "continue locally"
+}
+
+$ docker compose --env-file ports.template config --quiet
+exit=0
+
+$ docker compose --env-file ports.template --profile full config --quiet
+exit=0
+
+## Sự cố môi trường đã gặp và cách xử lý (ghi lại để tái lập)
+
+1. Docker Desktop chuyển sang read-only filesystem.
+   Triệu chứng: mọi lệnh pull/run/build fail với
+     write /var/lib/docker/buildkit/...: read-only file system
+   Nguyên nhân: ổ C: còn 26 MB trống, docker_data.vhdx (32 GB) không nở
+   thêm được nên ext4 bên trong VM remount read-only.
+   Xử lý: uv cache clean (2.4 GB) + xoá pip cache và user Temp -> C: lên
+   3.8 GB; restart Docker Desktop + wsl --shutdown; docker builder prune
+   -af thu hồi 21.66 GB build cache bên trong VHDX. Không xoá image nào.
+
+2. Image apache/kafka:4.3.1 hỏng layer (container exit 127,
+   'Error relocating /bin/bash: rl_readline_name: symbol not found').
+   Nguyên nhân: image được pull trong lúc filesystem đang hỏng.
+   Xử lý: docker rmi + docker pull lại.
+
+3. Image otel/opentelemetry-collector-contrib:0.159.0 hỏng tương tự
+   (exit 135 = SIGBUS, log rỗng). Xử lý: pull lại.
+
+## Giới hạn còn lại — KHÔNG khắc phục được trên máy này
+
+Profile 'full' (thêm Airflow 3, Spark Connect, Postgres) không chạy được
+với 7.8 GiB RAM vật lý, trong đó Docker chỉ được cấp 3.74 GiB và lúc đo
+chỉ còn 0.5 GiB RAM trống ở host. README mục Troubleshooting đã dự liệu
+trường hợp này: 'Máy yếu hoặc treo khi chạy toàn bộ -> chuyển phần này
+sang máy đủ mạnh hoặc môi trường do giảng viên cung cấp'.
+
+Hệ quả: IP02 (Airflow) và IP03 (Delta) chưa có bằng chứng live.
+IP07 (vLLM) cần endpoint GPU chưa được cấp.
+Các mục này báo UNVERIFIED, không giả lập.

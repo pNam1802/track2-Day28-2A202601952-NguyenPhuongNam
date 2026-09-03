@@ -1,0 +1,73 @@
+# IP01 — HTTP ingestion -> Kafka (base stack, live capture)
+# captured 2026-09-03T15:50:43Z
+# Chứng minh hàm event_headers() trong integration_tasks.py chạy thật:
+# mỗi message trên data.raw mang header idempotency-key + traceparent,
+# key = entity_id. Trace ID ở header trùng trace ID trong body (span ID
+# khác nhau là đúng — mỗi span là một chặng riêng).
+
+$ kafka-console-consumer.sh --topic data.raw --from-beginning --max-messages 3 --property print.headers=true --property print.key=true
+
+idempotency-key:doc-ip02-airflow,traceparent:00-e61ff92b9d246fa57ba4fc99415dc738-0e053681529104e8-01,schema_version:1	doc-ip02-airflow	{"schema_version":"1","event_id":"9429c37161124814995389a140565ee2","idempotency_key":"doc:doc-ip02-airflow:9b7e8bc4f2409294439202f5d734c323","entity_id":"doc-ip02-airflow","occurred_at":"2026-09-03T13:09:29.668380Z","producer":"lab28-api","traceparent":"00-e61ff92b9d246fa57ba4fc99415dc738-c77a3ec1ac1b8f5a-01","payload":{"kind":"document","doc_id":"doc-ip02-airflow","title":"IP02 — Airflow điều phối đường ống dữ liệu","text":"Airflow 3 chịu trách nhiệm điều phối luồng từ Kafka xuống Delta. DAG chạy theo lịch, đọc lô sự kiện từ data.raw, gọi job Spark để ghi vào lakehouse, rồi phát một asset event trên asset lab28://delta/feedback. Asset event là tín hiệu cho các DAG phía sau biết dữ liệu mới đã sẵn sàng, thay vì phải đoán bằng cách hẹn giờ. Tiến trình phục vụ không chứa mã điều phối: Airflow chạy trong image riêng của nó.","locale":"vi","tags":["ip02","airflow","orchestration"]}}
+idempotency-key:doc-ip08-gateway,traceparent:00-7881bcd72a0fdd7a3fa4faf571a23e79-ad2bdf8f4c21e089-01,schema_version:1	doc-ip08-gateway	{"schema_version":"1","event_id":"0366e7cc17f34c3ab8be95eec329ef09","idempotency_key":"doc:doc-ip08-gateway:e4dfa038a8a56b7b26089da6529bfa8a","entity_id":"doc-ip08-gateway","occurred_at":"2026-09-03T13:09:30.017358Z","producer":"lab28-api","traceparent":"00-7881bcd72a0fdd7a3fa4faf571a23e79-9c35430723836e61-01","payload":{"kind":"document","doc_id":"doc-ip08-gateway","title":"IP08 — Envoy là cổng vào có chính sách","text":"Envoy đứng trước API và thực thi chính sách trước khi yêu cầu chạm vào bất kỳ phụ thuộc nào: giới hạn tốc độ trả về 429, gắn header x-request-id để truy vết, và loại bỏ pod trả về 503 ở /ready ra khỏi vòng luân chuyển. Nhờ đó một pod đang hỏng sẽ ngừng nhận lưu lượng thay vì trả lỗi cho người dùng.","locale":"vi","tags":["ip08","envoy","gateway"]}}
+idempotency-key:doc-degraded-policy,traceparent:00-f488d62a0197aba1c5e7031cf6fd60ee-1271a3256a739eb6-01,schema_version:1	doc-degraded-policy	{"schema_version":"1","event_id":"a273b3a5a84b4aa4ac866fe400db98bd","idempotency_key":"doc:doc-degraded-policy:68db776fa8b109d09fe8554e0f85cc7e","entity_id":"doc-degraded-policy","occurred_at":"2026-09-03T13:09:30.307820Z","producer":"lab28-api","traceparent":"00-f488d62a0197aba1c5e7031cf6fd60ee-58594052f91b8854-01","payload":{"kind":"document","doc_id":"doc-degraded-policy","title":"Suy giảm phải luôn hiển thị","text":"Nền tảng cho phép trả lời trên đường suy giảm khi Feast hoặc Qdrant không sẵn sàng, nhưng bắt buộc phải ghi lý do vào phần bằng chứng và tăng bộ đếm lab28_degraded_responses_total. Đặt biến môi trường LAB28_ALLOW_DEGRADED thành false sẽ chuyển sang chế độ thất bại đóng: yêu cầu bị từ chối thay vì được trả lời trên đường thiếu dữ liệu.","locale":"vi","tags":["degraded","policy","serving"]}}
+Processed a total of 3 messages
+
+## Số message trên từng topic
+__consumer_offsets:0:0
+__consumer_offsets:1:0
+__consumer_offsets:10:0
+__consumer_offsets:11:0
+__consumer_offsets:12:0
+__consumer_offsets:13:0
+__consumer_offsets:14:0
+__consumer_offsets:15:0
+__consumer_offsets:16:0
+__consumer_offsets:17:0
+__consumer_offsets:18:0
+__consumer_offsets:19:0
+__consumer_offsets:2:0
+__consumer_offsets:20:0
+__consumer_offsets:21:0
+__consumer_offsets:22:0
+__consumer_offsets:23:0
+__consumer_offsets:24:0
+__consumer_offsets:25:0
+__consumer_offsets:26:0
+__consumer_offsets:27:0
+__consumer_offsets:28:0
+__consumer_offsets:29:3
+__consumer_offsets:3:0
+__consumer_offsets:30:0
+__consumer_offsets:31:0
+__consumer_offsets:32:0
+__consumer_offsets:33:0
+__consumer_offsets:34:0
+__consumer_offsets:35:0
+__consumer_offsets:36:0
+__consumer_offsets:37:0
+__consumer_offsets:38:0
+__consumer_offsets:39:0
+__consumer_offsets:4:0
+__consumer_offsets:40:0
+__consumer_offsets:41:0
+__consumer_offsets:42:0
+__consumer_offsets:43:0
+__consumer_offsets:44:0
+__consumer_offsets:45:3
+__consumer_offsets:46:0
+__consumer_offsets:47:0
+__consumer_offsets:48:0
+__consumer_offsets:49:0
+__consumer_offsets:5:0
+__consumer_offsets:6:0
+__consumer_offsets:7:0
+__consumer_offsets:8:0
+__consumer_offsets:9:0
+data.processed:0:0
+data.processed:1:0
+data.processed:2:0
+data.raw:0:16
+data.raw:1:18
+data.raw:2:14
+data.raw.dlq:0:0
+model.events:0:0
